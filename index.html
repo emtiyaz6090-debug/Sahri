@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic Premium Pro - By Emti</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4ade80;
+            --bg-dark: #010b13;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(74, 222, 128, 0.2);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        
+        body {
+            background: var(--bg-dark);
+            background-image: linear-gradient(rgba(1, 11, 19, 0.8), rgba(1, 11, 19, 0.9)), 
+                              url('https://images.unsplash.com/photo-1590076215667-873d96c89bb1?auto=format&fit=crop&q=80&w=1000');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+            font-family: 'Hind Siliguri', sans-serif;
+            margin: 0; padding-bottom: 100px;
+        }
+
+        /* Header UI */
+        .header-section {
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        #digital-clock {
+            font-size: 65px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--primary);
+            text-shadow: 0 0 30px rgba(74, 222, 128, 0.4);
+            font-family: monospace;
+            margin-bottom: 5px;
+        }
+
+        .date-text { font-size: 14px; opacity: 0.8; margin-bottom: 30px; }
+
+        /* Sahri/Iftar Cards */
+        .fasting-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px;
+        }
+
+        .fast-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .fast-card i { font-size: 24px; color: var(--primary); margin-bottom: 10px; display: block; }
+        .fast-card span { font-size: 13px; opacity: 0.7; display: block; }
+        .fast-card b { font-size: 20px; display: block; margin-top: 5px; }
+
+        /* Prayer List */
+        .prayer-list {
+            margin: 20px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .prayer-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .prayer-item:last-child { border: none; }
+        .prayer-name { display: flex; align-items: center; gap: 12px; font-weight: 500; }
+        .prayer-name i { color: var(--primary); width: 20px; text-align: center; }
+
+        /* Bottom Nav */
+        .nav-bar {
+            position: fixed; bottom: 20px; left: 20px; right: 20px;
+            background: rgba(1, 11, 19, 0.95);
+            backdrop-filter: blur(20px);
+            height: 75px; border-radius: 25px;
+            display: flex; justify-content: space-around; align-items: center;
+            border: 1px solid var(--border); z-index: 1000;
+        }
+
+        .nav-link { color: rgba(255,255,255,0.4); text-align: center; font-size: 11px; cursor: pointer; transition: 0.3s; }
+        .nav-link.active { color: var(--primary); transform: translateY(-5px); }
+        .nav-link i { font-size: 22px; display: block; margin-bottom: 4px; }
+
+        /* Footer Credit */
+        .footer-credit {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            opacity: 0.5;
+            letter-spacing: 1px;
+        }
+
+        /* Quran Styles */
+        #quran-list { padding: 20px; }
+        .surah-card {
+            background: var(--glass); border: 1px solid var(--border);
+            border-radius: 15px; padding: 15px; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .play-btn { color: var(--primary); font-size: 24px; cursor: pointer; }
+
+        .page { display: none; animation: fadeIn 0.4s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div id="home" class="page active">
+        <div class="header-section">
+            <div id="digital-clock">00:00:00</div>
+            <div class="date-text" id="date-bn">লোডিং...</div>
+            <div style="font-size: 14px; color: var(--primary);">
+                <i class="fa-solid fa-location-dot"></i> <span id="location-name">Dhaka, Bangladesh</span>
+            </div>
+        </div>
+
+        <div class="fasting-container">
+            <div class="fast-card">
+                <i class="fa-solid fa-moon"></i>
+                <span>সাহরির শেষ</span>
+                <b id="sehri-val">--:--</b>
+            </div>
+            <div class="fast-card">
+                <i class="fa-solid fa-sun"></i>
+                <span>ইফতারের শুরু</span>
+                <b id="iftar-val">--:--</b>
+            </div>
+        </div>
+
+        <div class="prayer-list" id="prayer-items">
+            </div>
+
+        <div class="footer-credit">© emti</div>
+    </div>
+
+    <div id="quran" class="page">
+        <div style="padding: 30px 20px;">
+            <h2 style="color: var(--primary);"><i class="fa-solid fa-book-open"></i> আল-কুরআন (অডিও)</h2>
+            <div id="quran-list">লোড হচ্ছে...</div>
+        </div>
+        <div class="footer-credit">© emti</div>
+    </div>
+
+    <audio id="main-player"></audio>
+
+    <div class="nav-bar">
+        <div class="nav-link active" onclick="showPage('home', this)"><i class="fa-solid fa-house-chimney"></i>Home</div>
+        <div class="nav-link" onclick="showPage('quran', this)"><i class="fa-solid fa-book-quran"></i>Quran</div>
+        <div class="nav-link" onclick="showPage('tasbih', this)"><i class="fa-solid fa-fingerprint"></i>Tasbih</div>
+        <div class="nav-link" onclick="showPage('settings', this)"><i class="fa-solid fa-user-ninja"></i>Set</div>
+    </div>
+
+    <script>
+        // ১. সময় ও ক্যালেন্ডার আপডেট
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('digital-clock').innerText = now.toLocaleTimeString('en-GB');
+            document.getElementById('date-bn').innerText = now.toLocaleDateString('bn-BD', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        }
+        setInterval(updateClock, 1000);
+
+        // ২. পেজ নেভিগেশন
+        function showPage(pageId, el) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            el.classList.add('active');
+            if(pageId === 'quran') loadQuran();
+        }
+
+        // ৩. নামাজ ও সেহরি/ইফতার আপডেট (Live API)
+        async function fetchPrayerTimes() {
+            try {
+                const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Dhaka&country=Bangladesh&method=1');
+                const data = await res.json();
+                const t = data.data.timings;
+
+                document.getElementById('sehri-val').innerText = t.Fajr;
+                document.getElementById('iftar-val').innerText = t.Maghrib;
+
+                const prayers = [
+                    { name: 'ফজর', time: t.Fajr, icon: 'fa-cloud-sun' },
+                    { name: 'যোহর', time: t.Dhuhr, icon: 'fa-sun' },
+                    { name: 'আসর', time: t.Asr, icon: 'fa-umbrella-beach' },
+                    { name: 'মাগরিব', time: t.Maghrib, icon: 'fa-moon' },
+                    { name: 'এশা', time: t.Isha, icon: 'fa-star-and-crescent' }
+                ];
+
+                document.getElementById('prayer-items').innerHTML = prayers.map(p => `
+                    <div class="prayer-item">
+                        <div class="prayer-name"><i class="fa-solid ${p.icon}"></i> ${p.name}</div>
+                        <div style="font-weight: 600;">${p.time}</div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                console.error("Error loading times");
+            }
+        }
+
+        // ৪. কুরআন অডিও সিস্টেম
+        async function loadQuran() {
+            const list = document.getElementById('quran-list');
+            const res = await fetch('https://api.alquran.cloud/v1/surah');
+            const data = await res.json();
+            
+            list.innerHTML = data.data.slice(0, 20).map(s => `
+                <div class="surah-card">
+                    <div>
+                        <div style="font-weight: 600;">${s.englishName}</div>
+                        <div style="font-size: 12px; opacity: 0.6;">${s.name} | ${s.numberOfAyahs} Ayahs</div>
+                    </div>
+                    <i class="fa-solid fa-circle-play play-btn" onclick="playAudio(${s.number}, this)"></i>
+                </div>
+            `).join('');
+        }
+
+        function playAudio(surahNumber, el) {
+            const player = document.getElementById('main-player');
+            const url = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${surahNumber}.mp3`;
+            
+            if (player.src === url && !player.paused) {
+                player.pause();
+                el.classList.replace('fa-circle-pause', 'fa-circle-play');
+            } else {
+                document.querySelectorAll('.play-btn').forEach(b => b.classList.replace('fa-circle-pause', 'fa-circle-play'));
+                player.src = url;
+                player.play();
+                el.classList.replace('fa-circle-play', 'fa-circle-pause');
+            }
+        }
+
+        // ৫. অটো লোকেশন ডিটেকশন
+        function getLiveLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (pos) => {
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+                    const res = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=1`);
+                    const data = await res.json();
+                    // Update times based on GPS
+                    fetchPrayerTimes(); 
+                    document.getElementById('location-name').innerText = "আপনার বর্তমান অবস্থান";
+                });
+            }
+        }
+
+        // ইনশিয়াল কল
+        fetchPrayerTimes();
+        getLiveLocation();
+    </script>
+</body>
+  </html>
